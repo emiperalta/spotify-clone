@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { userLogin } from 'services/auth';
+import { userLogin, userRefreshToken } from 'services/auth';
 
 export default function useAuth({ code }) {
   const [accessToken, setAccessToken] = useState('');
@@ -17,4 +17,19 @@ export default function useAuth({ code }) {
       })
       .catch(() => (window.location = '/'));
   }, [code]);
+
+  useEffect(() => {
+    if (!refreshToken || !expiresIn) return;
+    const interval = setInterval(() => {
+      userRefreshToken(refreshToken)
+        .then(res => {
+          setAccessToken(res.accessToken);
+          setExpiresIn(res.expiresIn);
+        })
+        .catch(() => (window.location = '/'));
+    }, (expiresIn - 60) * 1000);
+    return () => clearInterval(interval);
+  }, [refreshToken, expiresIn]);
+
+  return accessToken;
 }
