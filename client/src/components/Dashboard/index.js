@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Container, Form } from 'react-bootstrap';
 import SpotifyWebApi from 'spotify-web-api-node';
+import { Container, FormControl } from 'react-bootstrap';
+import { BsSearch } from 'react-icons/bs';
 
 import Track from 'components/Track';
 
 import useAuth from 'hooks/useAuth';
 
 import { CLIENT_ID } from 'utils/auth';
+
+import './Dashboard.css';
 
 const spotifyApi = new SpotifyWebApi({ CLIENT_ID });
 
@@ -46,20 +49,23 @@ export default function Dashboard({ code }) {
   }, [search, accessToken]);
 
   return (
-    <Container className='d-flex flex-column py-2' style={{ height: '100vh' }}>
-      <Form.Control
+    <Container className='d-flex flex-column py-2 search-container'>
+      <div className='search-icon'>
+        <BsSearch />
+      </div>
+      <FormControl
+        className='search-bar'
         onChange={e => setSearch(e.target.value)}
         placeholder='Search songs...'
-        style={{ borderRadius: 50, padding: 8 }}
         type='search'
         value={search}
       />
-      <div className='flex-grow-1 my-2' style={{ overflowY: 'auto' }}>
+      <div className='flex-grow-1 my-2 track-list'>
         {searchResults.map(track => (
           <Track key={track.uri} track={track} />
         ))}
       </div>
-      <div>Bottom</div>
+      <div>Player</div>
     </Container>
   );
 }

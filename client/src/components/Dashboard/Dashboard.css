@@ -1,0 +1,21 @@
+.search-container {
+  height: 100vh;
+}
+
+.search-icon {
+  position: absolute;
+  top: 6px;
+  margin-left: 15px;
+  font-size: 1.5rem;
+}
+
+.search-bar {
+  padding: 8px 10px 8px 53px !important;
+  border-radius: 30px !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.track-list {
+  overflow-y: auto;
+}
