@@ -4,6 +4,7 @@ import { Container, FormControl } from 'react-bootstrap';
 import { BsSearch } from 'react-icons/bs';
 
 import Track from 'components/Track';
+import Player from 'components/Player';
 
 import useAuth from 'hooks/useAuth';
 
@@ -16,6 +17,7 @@ const spotifyApi = new SpotifyWebApi({ CLIENT_ID });
 export default function Dashboard({ code }) {
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedTrack, setSelectedTrack] = useState('');
 
   const accessToken = useAuth({ code });
 
@@ -48,6 +50,8 @@ export default function Dashboard({ code }) {
     return () => (cancel = true);
   }, [search, accessToken]);
 
+  const chooseTrack = track => setSelectedTrack(track);
+
   return (
     <Container className='d-flex flex-column py-2 search-container'>
       <div className='search-icon'>
@@ -62,10 +66,12 @@ export default function Dashboard({ code }) {
       />
       <div className='flex-grow-1 my-2 track-list'>
         {searchResults.map(track => (
-          <Track key={track.uri} track={track} />
+          <Track chooseTrack={chooseTrack} key={track.uri} track={track} />
         ))}
       </div>
-      <div>Player</div>
+      <div>
+        <Player accessToken={accessToken} trackUri={selectedTrack?.uri} />
+      </div>
     </Container>
   );
 }
